@@ -67,25 +67,23 @@ It consists of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Input (Layer1)        		| 32x32x1 Grayscale image   							| 
+| Input (L1)        | 32x32x1 Grayscale image   							| 
 | Convolution 3x3     	| 1x1 stride, valid padding, outputs 30x30x64 	|
 | RELU					|												|
 | Dropout					|	With dropout probability = 50%											|
-
 | Max pooling	      	| 2x2 stride, valid padding, outputs 15x15x64 				|
-
-| Convolution 5x5 (Layer2)     	| 1x1 stride, valid padding, outputs 11x11x64 	|
+| Convolution 5x5 (L2)  | 1x1 stride, valid padding, outputs 11x11x64 	|
 | RELU					|												|
 | Dropout					|	With dropout probability = 50%											|
 | Max pooling	      	| 2x2 stride, valid padding, outputs 5x5x64 				|
-| Flatten | input 5x5x64, output 1600
-| Fully connected	(Layer3)	| input 1600, output 120  									|
+| Flatten | input 5x5x64, output 1600 |
+| Fully connected	(L3)	| input 1600, output 120  									|
 | RELU					|												|
 
-| Fully connected	(Layer4)	| input 120, output  84 									|
+| Fully connected	(L4)	| input 120, output  84 						|
 | RELU					|												|
 
-| Fully connected	(Layer5)	| input 84, output  43(the number of distint traffic signs) 									|
+| Fully connected	(L5)	| input 84, output  43 |
 
 
 | One hot key encoding |        									|
