@@ -22,7 +22,8 @@ The goals / steps of this project are the following:
 [image6]: ./test_images/example_00003.png "Traffic Sign 3"
 [image7]: ./test_images/example_0004.png "Traffic Sign 4"
 [image8]: ./test_images/example_0005.png "Traffic Sign 5" 
-[image9]: ./test_images/example_0006.png "Traffic Sign 5"
+[image9]: ./test_images/example_0006.png "Traffic Sign 6"
+[image10]: ./examples/random_plot.png "random plot"
 
 ### Data Set Summary & Exploration
 
@@ -43,6 +44,10 @@ Here is an exploratory visualization of the data set (a histogram of the trannin
 
 ![alt text][image1]
 
+I randomly selected 4 images from the trannin set and plot them in the following figure, 
+![alt text][image10]
+
+As can been seen, they have different lighting and contrast to name a few. Diversity in the trainning set should help train a comprehensive model rather than focusing on a paticular set of images. 
 ### Design and Test a Model Architecture
 
 #### 1. Preprocess data
@@ -52,7 +57,6 @@ The following techinques are used to preprocess data:
 
 Here is an example of a traffic sign image before and after grayscaling.
 
-Addition
 
 ![alt text][image2]
 
@@ -91,14 +95,25 @@ The following paramers are used to train the above model:
 2. EPOCH = 200  (with early termination when validation accuracy >= 95%)
 3. batch size = 512
 
-The model is trained on a local GPU (Nvidia Gforce 1060 with 4GB memory)
+Using the same learning rate in Lenet for number classification, 0.001 is a good default value. 
+
+Technically, the large the EPOCH, the better the model. However, it takes longer time to train. Here 200 seems to be a reasonable number of iteraions and early termination is used to prevent over-trainning.  
+
+As for the batch size, the large the batch size, the faster the model trains. But the memory on GPU/CPU is limited, so number 512 is choosen to tradeoff between speed and memory usage. 
+
+Adaptive methods such as Adam optimizer is a little more complicated than stochastic gradient descent, and most of the time yields better performance. It is adopted here to train the model.
+
+The model is trained on a local GPU (Nvidia Gforce 1060 with 4GB memory).
 
 #### 4. Model performance
 
 My final model results were:
 * validation set accuracy of 95.1%
 * test set accuracy of 93%
- 
+
+LetNet is adopted in this project as the architecture foundation, it has two CNN layer and three fully connected layer, Which seems to be sufficient for this project. However, with the default settings (as in the lecture), I was not able to reach the goal of validation accuracy (the highest I got was around 86%, which is far below expectation).
+
+The reason is that 6 filters is not sufficient to extract enough features to accurately predict 43 different classes (as opposed to only 10 classes in the lecture). After increasing the number of filters to 64 and reduce the kernel size to 3x3, significant improvements were observed.  
 
 ### Test a Model on New Images
 
@@ -109,6 +124,7 @@ Here are six German traffic signs that I found on the web:
 ![alt text][image4] ![alt text][image5] ![alt text][image6] 
 ![alt text][image7] ![alt text][image8] ![alt text][image9]
 
+Among the new images, image 1 (roundabout), and 5 (20 km/h) should be a little harder to predict than the other images. For exmaple, image 2,3 4, should be easy to predict, as there is only one line(arrow) on a plain background in each image.    
 
 #### 2. Prediction
 The model predicts correctly 6 out of 6 images, which yields an accuracy of 100%, which compares favorably with the test set accuracy of 93%.
@@ -128,6 +144,49 @@ Here are the results of the prediction:
 
 For the given new images, the model is relatively sure of its predictions, with the top prediction close to 1.0 for all the cases.
 As for each image, I select to output the top 5 logits (before softmax function) to get a better understanding of which top five prediction scores (as probabilities other than the top one will be so close to zero, top_k is not able to select sensibly)
+
+The top_k logits for each image are listed below
+
+Image 1 
+
+| Scores         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 5059        			| Roundabout mandatory  									| 
+| 3500    				| Priority road 										|
+| 1675					| Right-of-way at the next intersection											|
+| 1016	      			| 100 km/h					 				|
+| 828				    | Slippery road   							|
+
+Image 2
+
+| Scores         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 6107        			| Keep right   									| 
+| 2506    				| Turn left ahead									|
+| 2219					| Slippery road											|
+| 1191	      			| Road work			 				|
+| 1181				    | Roundabout mandatory      							|
+
+Image 3
+
+| Scores         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 3749        			|   No entry 									| 
+| 3306    				|  			Stop						|
+| 2016					| Go straight or left					|
+| 1979	      			| Turn right ahead				 				|
+| 1856				    |  Keep left     							|
+
+Image 4
+
+| Scores         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 8066        			| Keep left 									| 
+| 4153    				| Road work 										|
+| 3130					| Go straight or left											|
+| 2105	      			| Traffic signs				 				|
+| 1452				    | Stop  							|
+
 Here is an example for the 5th image:
 
 | Scores         	|     Prediction	        					| 
@@ -141,5 +200,14 @@ Here is an example for the 5th image:
 As can be seen from the above table, these are very close numbers which sometime hard to distinguish, even from human eyes. 
 Overall, this model performs satisfactorily. 
 
+Image 6
+
+| Scores         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 5453       			| Turn left ahead   									| 
+| 3009    				| Ahead only										|
+| 2018					| 30 km /h										|
+| 1782	      			| Stop				 				|
+| 1589				    | Go straight or left  							|
 
 
