@@ -187,7 +187,7 @@ Image 4
 | 2105	      			| Traffic signs				 				|
 | 1452				    | Stop  							|
 
-Here is an example for the 5th image:
+Image 5
 
 | Scores         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
